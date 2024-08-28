@@ -1,5 +1,7 @@
-from masks import get_mask_account, get_mask_card_number # импорт модуля проекта
-from datetime import datetime #импорт библиотеки обработки времени Python
+from datetime import datetime  # импорт библиотеки обработки времени Python
+
+from masks import get_mask_account, get_mask_card_number  # импорт модуля проекта
+
 
 def mask_account_card(check: str) -> str:
     """
@@ -33,17 +35,21 @@ print(mask_account_card("Visa Gold 5999414228426353"))
 print(mask_account_card("Счет 73654108430135874305"))
 
 
-def get_date(date_string):
+def get_date(date_string: str) -> str:
     """
     Функция конвертер формата отображения даты
     """
-    # Преобразование строки в объект datetime
-    dt = datetime.strptime(date_string, "%Y-%m-%dT%H:%M:%S.%f")
+    try:
+        # Преобразование строки в объект datetime
+        dt = datetime.strptime(date_string, "%Y-%m-%dT%H:%M:%S.%f")
 
-    # Форматирование объекта datetime в строку с желаемым форматом
-    formatted_date = dt.strftime("%d.%m.%Y")
+        # Форматирование объекта datetime в строку с желаемым форматом
+        formatted_date = dt.strftime("%d.%m.%Y")
 
-    return formatted_date
+        return formatted_date
+    except ValueError as e:
+        print(f"Ошибка при преобразовании даты: {e}")
+        return ""
 
 
 # Пример использования функции
