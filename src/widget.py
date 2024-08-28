@@ -31,3 +31,24 @@ print(mask_account_card("Visa Classic 6831982476737658"))
 print(mask_account_card("Visa Platinum 8990922113665229"))
 print(mask_account_card("Visa Gold 5999414228426353"))
 print(mask_account_card("Счет 73654108430135874305"))
+
+from datetime import datetime
+
+
+def get_date(date_string):
+    '''
+    Функция конвертер формата отображения даты
+    '''
+    # Преобразование строки в объект datetime
+    dt = datetime.strptime(date_string, "%Y-%m-%dT%H:%M:%S.%f")
+
+    # Форматирование объекта datetime в строку с желаемым форматом
+    formatted_date = dt.strftime("%d.%m.%Y")
+
+    return formatted_date
+
+
+# Пример использования функции
+date_string = "2024-03-11T02:26:18.671407"
+formatted_date = get_date(date_string)
+print(formatted_date)  # Вывод: "11.03.2024"
