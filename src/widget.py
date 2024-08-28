@@ -1,5 +1,5 @@
-from masks import get_mask_account, get_mask_card_number
-
+from masks import get_mask_account, get_mask_card_number # импорт модуля проекта
+from datetime import datetime #импорт библиотеки обработки времени Python
 
 def mask_account_card(check: str) -> str:
     """
@@ -32,13 +32,11 @@ print(mask_account_card("Visa Platinum 8990922113665229"))
 print(mask_account_card("Visa Gold 5999414228426353"))
 print(mask_account_card("Счет 73654108430135874305"))
 
-from datetime import datetime
-
 
 def get_date(date_string):
-    '''
+    """
     Функция конвертер формата отображения даты
-    '''
+    """
     # Преобразование строки в объект datetime
     dt = datetime.strptime(date_string, "%Y-%m-%dT%H:%M:%S.%f")
 
