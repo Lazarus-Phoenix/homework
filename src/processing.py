@@ -1,14 +1,13 @@
 from datetime import datetime
-from typing import Any, Dict, List
 
 
-def filter_by_state(operations: List[Dict[str, Any]], state: str = "EXECUTED") -> List[Dict[str, Any]]:
+def filter_by_state(operations: list[dict[str, int]], state: str = "EXECUTED") -> list[dict[str, int]]:
     """Фильтрация операций по состоянию"""
     filtered_operations = [i for i in operations if i["state"] == state]
     return filtered_operations
 
 
-def sort_by_date(filtered_operations: List[Dict[str, Any]], reverse: bool = True) -> List[Dict[str, Any]]:
+def sort_by_date(filtered_operations: list[dict[str, int]], reverse: bool = True) -> list[dict[str, int]]:
     """Сортировка операций по дате"""
     sorted_list = sorted(
         filtered_operations, key=lambda x: datetime.strptime(x["date"], "%Y-%m-%dT%H:%M:%S.%f"), reverse=reverse
