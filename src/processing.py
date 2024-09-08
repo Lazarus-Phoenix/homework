@@ -1,7 +1,8 @@
 from datetime import datetime
+from typing import List, Dict, Any
 
 
-def filter_by_state(operations: list[dict[str, int]], state: str = "EXECUTED") -> list[dict[str, int]]:
+def filter_by_state(operations: List[Dict[str, Any]], state: str = "EXECUTED") -> List[Dict[str, Any]]:
     """Фильтрация операций по состоянию"""
     filtered_operations = [i for i in operations if i["state"] == state]
     return filtered_operations
