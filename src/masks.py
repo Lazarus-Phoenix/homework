@@ -12,7 +12,8 @@ def get_mask_account(account_list: str) -> str:
     """принимает на вход номер счета в виде числа и возвращает
     маску номера по правилу **XXXX"""
     account_string = str(account_list)
-
+    if account_string == "":
+        return "Введите корректный номер"
     viveport = f"** {account_string[-4:]}"
 
     return viveport
