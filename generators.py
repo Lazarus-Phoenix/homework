@@ -97,3 +97,19 @@ for filter_by_currency in range(3):
     print(next(pay_transaction))
 
 
+def transaction_descriptions(transaction_list: list, descriptions: str = "Нет транзакций.") -> iter :
+    """ Функция возвращает описание операций из принимаемого на вход списка """
+    if transaction_list == [ ] :
+        yield descriptions
+
+    else:
+        for pay in transaction_list:
+            yield pay.get("description")
+
+pay_description = transaction_descriptions(transactions)
+for transaction_descriptions in range(5):
+    print(next(pay_description))
+
+
+def card_number_generator():
+    pass
