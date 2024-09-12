@@ -111,5 +111,10 @@ for transaction_descriptions in range(5):
     print(next(pay_description))
 
 
-def card_number_generator():
-    pass
+def card_number_generator(start, stop):
+    for i in range(start, stop + 1):
+        num_str = str(i)
+        padding = '0' * (16 - len(num_str))
+        yield padding + num_str
+for card_number in card_number_generator(1, 5):
+    print(card_number)
