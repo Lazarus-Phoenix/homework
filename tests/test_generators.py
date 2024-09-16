@@ -1,6 +1,6 @@
 import pytest
 
-from src.generators import transaction_descriptions, filter_by_currency,card_number_generator
+from src.generators import transaction_descriptions, filter_by_currency, card_number_generator
 
 
 def test_empty_list():
@@ -26,7 +26,7 @@ def sample_transaction():
     return [
         {"operationAmount": {"currency": {"code": "RUB"}}},
         {"operationAmount": {"currency": {"code": "USD"}}},
-        {"operationAmount": {"currency": {"code": "EUR"}}}
+        {"operationAmount": {"currency": {"code": "EUR"}}},
     ]
 
 
@@ -87,6 +87,7 @@ def test_invalid_code(sample_transaction):
     with pytest.raises(StopIteration):
         next(filtered_transactions)
 
+
 def test_empty_list():
     """
     Тест функции с пустым списком транзакций.
@@ -110,7 +111,7 @@ def sample_transactions():
     return [
         {"description": "Перевод организации"},
         {"description": "Перевод со счета на счет"},
-        {"description": "Перевод с карты на карту"}
+        {"description": "Перевод с карты на карту"},
     ]
 
 
@@ -152,16 +153,43 @@ def test_description_type(sample_transactions):
     # Проверяем, что первое возвращенное значение является строкой
     assert isinstance(next(descriptions), str)
 
-@pytest.fixture(params=[
-    (1, 10),
-    (100, 110),
-    (99999, 99999),
-])
+
+@pytest.fixture(
+    params=[
+        (1, 10),
+        (100, 110),
+        (99999, 99999),
+    ]
+)
 def test_data(request):
+    """
+    Фикстура для создания набора тестовых данных для генератора номеров карт.
+
+    Эта фикстура используется для параметризации тестов, позволяя проверить работу генератора
+    с различными диапазонами чисел. Она возвращает кортеж из двух целых чисел, представляющих
+    начало и конец диапазона для генерации номеров карт.
+
+    Параметры:
+    - (1, 10): Тестовый диапазон от 1 до 10, проверяет работу с малыми числами.
+    - (100, 110): Тестовый диапазон от 100 до 110, проверяет работу со средними числами.
+    - (99999, 99999): Тестовый диапазон с одинаковым началом и концом, проверяет работу с одним числом.
+
+    Возвращаемое значение:
+    request.param - текущий параметр из списка params, который будет использоваться в тесте.
+    """
     return request.param
 
 
+
 def test_card_number_generator(test_data):
+    """
+    Тест генератора номеров карт.
+
+    Этот тест проверяет работу функции card_number_generator с различными диапазонами чисел.
+    Он использует параметризацию для проверки нескольких случаев.
+
+    :param test_data: Кортеж, содержащий начальную и конечную точки диапазона.
+    """
     start, stop = test_data
     expected_output = [str(i).zfill(16) for i in range(start, stop + 1)]
 
@@ -174,16 +202,38 @@ def test_card_number_generator(test_data):
 
 
 def test_start_at_16():
+    """
+    Тест генератора номеров карт, начинающегося с 16.
+
+    Этот тест проверяет, правильно ли работает генератор при начале диапазона с 16.
+    Он создает список из двух чисел (16 и 17) и сравнивает его с ожидаемым результатом.
+    """
     output = list(card_number_generator(16, 17))
-    assert output == ['0000000000000016', '0000000000000017'], "Unexpected output"
+    assert output == ["0000000000000016", "0000000000000017"], "Unexpected output"
 
 
 def test_stop_at_16():
+    """
+    Тест генератора номеров карт, заканчивающегося на 16.
+
+    Этот тест проверяет, правильно ли работает генератор при окончании диапазона на 16.
+    Он создает список из двух чисел (15 и 16) и сравнивает его с ожидаемым результатом.
+    """
     output = list(card_number_generator(15, 16))
-    assert output == ['0000000000000015', '0000000000000016'], "Unexpected output"
+    assert output == ["0000000000000015", "0000000000000016"], "Unexpected output"
 
 
 def test_range_includes_16():
+    """
+    Тест генератора номеров карт для диапазона, включающего число 16.
+
+    Этот тест проверяет работу генератора в более широком диапазоне, который включает число 16.
+    Он создает список из четырех чисел (14, 15, 16 и 17) и сравнивает его с ожидаемым результатом.
+    """
     output = list(card_number_generator(14, 17))
-    assert output == ['0000000000000014', '0000000000000015', '0000000000000016', '0000000000000017'], \
-        "Unexpected output"
+    assert output == [
+        "0000000000000014",
+        "0000000000000015",
+        "0000000000000016",
+        "0000000000000017",
+    ], "Unexpected output"
