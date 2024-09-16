@@ -1,3 +1,4 @@
+
 transactions = (
     [
         {
@@ -79,42 +80,58 @@ transactions = (
 )
 
 
-def filter_by_currency(transactions_list: list, key: str = "Нет транзакций.") -> iter:
-    """ Функция создает итератор, который фильтрует транзакции по заданному значению валюты.
-    Если список транзакций пуст, возвращает сообщение "Нет транзакций.".
-    Иначе итерируется по списку, проверяет код валюты каждой транзакции и возвращает соответствующую
-    транзакцию или сообщение "Транзакции отсутствуют."
+def filter_by_currency(transaction_list: list, code: str) -> iter:
     """
-    if transactions_list == [ ]:
-        yield key
+    Функция создает итератор, который фильтрует транзакции по заданному значению валюты.
+    Если список транзакций пуст, возвращает сообщение "Нет транзакций.".
+    Иначе перебирается по списку, проверяется код валюты каждой транзакции и возвращается
+    соответствующая транзакция или None для неподходящих транзакций.
+    """
+
+    # Проверяем, пуст ли список транзакций
+    if not transaction_list:
+        yield "Нет транзакций."
 
     else:
-        for transactions_pay in transactions_list :
-            if transactions_pay.get("operationAmount", {}).get("currency", {}).get("code", {}) == key:
-                yield transactions_pay
+        # Итерируемся по списку транзакций
+        for transaction_pay in transaction_list:
+            # Получаем код валюты из транзакции
+            currency_code = transaction_pay.get("operationAmount", {}).get("currency", {}).get("code")
+
+            # Если код валюты совпадает с заданным значением, возвращаем транзакцию
+            if currency_code == code:
+                yield transaction_pay
             else:
-                yield "Транзакции отсутствуют."
+                yield None
 
 
-pay_transaction = filter_by_currency(transactions, "RUB")
-for filter_by_currency in range(3):
-    print(next(pay_transaction))
+pay_transaction = filter_by_currency(transactions,"USD")
+for _ in range(3):
+    result = next(pay_transaction)
+    if result:
+        print(result)
+    else:
+        print("Транзакции в данной валюте отсутствуют")
 
 
-def transaction_descriptions(transaction_list: list, descriptions: str = "Нет транзакций.") -> iter :
+def transaction_descriptions(transaction_list: list, descriptions: str) -> iter:
     """ Функция создает итератор, который возвращает описания операций из переданного списка транзакций.
     Если список пуст, возвращает сообщение "Нет транзакций.". Иначе итерируется по списку и возвращает
     описание каждой транзакции.
     """
-    if transaction_list == [ ] :
-        yield descriptions
+
+    if not transaction_list:
+        yield "Нет описания."
+
 
     else:
+
         for pay in transaction_list:
             yield pay.get("description")
 
-pay_description = transaction_descriptions(transactions)
-for transaction_descriptions in range(5):
+
+pay_description = transaction_descriptions(transactions,"descriptions")
+for _ in range(5):
     print(next(pay_description))
 
 
@@ -129,3 +146,4 @@ def card_number_generator(start, stop):
         yield padding + num_str
 for card_number in card_number_generator(1, 5):
     print(card_number)
+
