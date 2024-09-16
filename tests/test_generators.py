@@ -1,6 +1,6 @@
 import pytest
 
-from src.generators import transaction_descriptions, filter_by_currency, card_number_generator
+from src.generators import card_number_generator, filter_by_currency, transaction_descriptions
 
 
 def test_empty_list():
@@ -178,7 +178,6 @@ def test_data(request):
     request.param - текущий параметр из списка params, который будет использоваться в тесте.
     """
     return request.param
-
 
 
 def test_card_number_generator(test_data):
