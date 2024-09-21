@@ -1,0 +1,24 @@
+2024-09-21 22:38:17 | decorated_function started
+my_function ok
+2024-09-21 22:38:17 | decorated_function finished successfully
+Execution time: 0.0001 seconds
+2024-09-21 22:51:00 | decorated_function started
+my_function ok
+2024-09-21 22:51:00 | decorated_function finished successfully
+Execution time: 0.0001 seconds
+2024-09-21 23:03:17 | decorated_function started
+my_function ok
+2024-09-21 23:03:17 | decorated_function finished successfully
+Execution time: 0.0002 seconds
+2024-09-21 23:07:57 | decorated_function started
+my_function ok
+2024-09-21 23:07:57 | decorated_function finished successfully
+Execution time: 0.0001 seconds
+2024-09-21 23:08:38 | decorated_function started
+my_function ok
+2024-09-21 23:08:38 | decorated_function finished successfully
+Execution time: 0.0002 seconds
+2024-09-21 23:15:05 | decorated_function started
+my_function ok
+2024-09-21 23:15:05 | decorated_function finished successfully
+Execution time: 0.0001 seconds

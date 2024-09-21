@@ -1,84 +1,86 @@
-"""
-Модуль для логирования функций.
-
-Содержит декоратор log, который позволяет логировать выполнение функций,
-их результаты, возможные ошибки и время выполнения.
-"""
-
 import functools
 import time
 from datetime import datetime
 
+
 def log(filename=None):
     """
-    Декоратор-фабрика для логирования функций.
-
-    Args:
-        filename (str): Имя файла для логирования. Если None, логи выводятся в консоль.
-
-    Returns:
-        function: Декоратор для логирования функций.
+    Функция-декоратор для логирования выполнения функций.
+    Этот декоратор записывает информацию о начале и конце выполнения функции,
+    включая время начала и конца выполнения, а также время выполнения.
+    При возникновении ошибки, он также записывает информацию об этом.
     """
+
     def decorator(func):
+        """
+        Внутренний декоратор для обработки конкретной функции.
+        Эта обертка сохраняет оригинальное имя функции и документацию с помощью functools.wraps().
+        Она измеряет время выполнения функции и формирует сообщения о начале и конце выполнения.
+        """
+
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
             """
-            Обертка для декорируемой функции.
-
-            Args:
-                *args: Неименованные аргументы.
-                **kwargs: Именованные аргументы.
-
-            Returns:
-                Any: Результат выполнения декорируемой функции.
+            Основная функция-обертка, которая выполняет саму функцию и управляет логированием.
+            Эта функция измеряет время начала выполнения, формирует сообщение о начале выполнения,
+            вызывает исходную функцию, обрабатывает возможные исключения, формирует сообщение о завершении
+            и измеряет время окончания выполнения.
             """
-            # Сохраняем время начала выполнения функции
+
             start_time = time.time()
 
-            # Формируем сообщение о начале выполнения
             start_message = f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} | {func.__name__} started"
 
-            # Логируем начало выполнения
             if filename:
-                with open(filename, "a") as file:
-                    file.write(start_message + "\n")
+                try:
+                    with open(filename, "a") as file:
+                        file.write(start_message + "\n")
+                except IOError:
+                    print(f"Error opening file {filename}")
+
             else:
                 print(start_message)
 
             try:
-                # Выполняем оригинальную функцию
                 result = func(*args, **kwargs)
 
-                # Формируем сообщение о успешном завершении
-                end_message = f"my_function ok \n{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} | {func.__name__} finished successfully"
+                end_message = f"my_function ok\n{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} | {func.__name__} finished successfully"
             except Exception as e:
-                # Если произошла ошибка, формируем соответствующее сообщение
                 end_message = f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} | {func.__name__} finished with error: {type(e).__name__}"
+                result = None  # Добавляем эту строку
 
-            # Сохраняем время завершения
             end_time = time.time()
-
-            # Вычисляем время выполнения
             execution_time = f"Execution time: {(end_time - start_time):.4f} seconds"
 
-            # Формируем полное сообщение о завершении
             full_message = f"{end_message}\n{execution_time}"
 
-            # Логируем информацию о завершении
             if filename:
-                with open(filename, "a") as file:
-                    file.write(full_message + "\n")
+                try:
+                    with open(filename, "a") as file:
+                        file.write(full_message + "\n")
+                except IOError:
+                    print(f"Error writing to file {filename}")
             else:
                 print(full_message)
 
-            # Возвращаем результат выполнения функции
-            return result
+            return result  # Возвращаем результат
 
         return wrapper
 
     return decorator
 
-# Пример использования декоратора
+
+"""
+Пример использования декоратора:
+
+@log(filename="mylog.txt")
+def my_function(x, y):
+    return x + y
+
+my_function(1, 2)
+"""
+
+
 @log(filename="mylog.txt")
 def my_function(x, y):
     return x + y
