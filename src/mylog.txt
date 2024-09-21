@@ -1,1 +1,4 @@
-my_function ok
+2024-09-21 18:26:47 | my_function started
+my_function ok 
+2024-09-21 18:26:47 | my_function finished successfully
+Execution time: 0.0002 seconds
