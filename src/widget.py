@@ -1,6 +1,6 @@
 from datetime import datetime  # импорт библиотеки обработки времени Python
 
-from masks import get_mask_account, get_mask_card_number  # импорт модуля проекта
+from src.masks import get_mask_account, get_mask_card_number  # импорт модуля проекта
 
 
 def mask_account_card(check: str) -> str:
@@ -8,8 +8,10 @@ def mask_account_card(check: str) -> str:
     Принимает на вход номер счёта и данные карты, и маскирует их при возврате
     """
     if "Счет" in check:
-
-        return f"Счёт {get_mask_account(check)}"
+        account_number = check.split(" ")[1]  # Извлекаем номер счета
+        if len(account_number) != 20 :
+            return "Некорректный номер счёта"
+        return f"Счет {get_mask_account(check)}"
 
     letters = ""
     numbers = ""
