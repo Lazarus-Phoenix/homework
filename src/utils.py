@@ -1,5 +1,5 @@
-import json
 import os
+import json
 
 
 def read_transactions_from_json():
@@ -19,10 +19,20 @@ def read_transactions_from_json():
     if not os.path.exists(file_path) or not file_path.endswith('.json'):
         return []
     else:
-        with open(file_path) as f:
-            data = json.load(f)
-        return data
+        try:
+            with open(file_path) as f:
+                data = json.load(f)
 
-    # В корне проекта или из любой другой части проекта
+            # Проверяем, является ли загруженное значение списком
+            if isinstance(data, list):
+                return data
+            else:
+                return []
+        except json.JSONDecodeError:
+            # Если произошла ошибка при декодировании JSON, возвращаем пустой список
+            return []
+
+
+# В корне проекта или из любой другой части проекта
 operations = read_transactions_from_json()
 print(operations)
