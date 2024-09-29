@@ -22,3 +22,27 @@ Execution time: 0.0002 seconds
 my_function ok
 2024-09-21 23:15:05 | decorated_function finished successfully
 Execution time: 0.0001 seconds
+2024-09-29 15:32:22 | decorated_function started
+my_function ok
+2024-09-29 15:32:22 | decorated_function finished successfully
+Execution time: 0.0002 seconds
+2024-09-29 15:34:03 | decorated_function started
+my_function ok
+2024-09-29 15:34:03 | decorated_function finished successfully
+Execution time: 0.0001 seconds
+2024-09-29 15:46:17 | decorated_function started
+my_function ok
+2024-09-29 15:46:17 | decorated_function finished successfully
+Execution time: 0.0001 seconds
+2024-09-29 15:46:52 | decorated_function started
+my_function ok
+2024-09-29 15:46:52 | decorated_function finished successfully
+Execution time: 0.0001 seconds
+2024-09-29 17:10:12 | decorated_function started
+my_function ok
+2024-09-29 17:10:12 | decorated_function finished successfully
+Execution time: 0.0002 seconds
+2024-09-29 17:16:52 | decorated_function started
+my_function ok
+2024-09-29 17:16:52 | decorated_function finished successfully
+Execution time: 0.0001 seconds
