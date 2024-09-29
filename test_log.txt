@@ -46,3 +46,19 @@ Execution time: 0.0002 seconds
 my_function ok
 2024-09-29 17:16:52 | decorated_function finished successfully
 Execution time: 0.0001 seconds
+2024-09-30 02:34:40 | decorated_function started
+my_function ok
+2024-09-30 02:34:40 | decorated_function finished successfully
+Execution time: 0.0002 seconds
+2024-09-30 02:34:51 | decorated_function started
+my_function ok
+2024-09-30 02:34:51 | decorated_function finished successfully
+Execution time: 0.0001 seconds
+2024-09-30 04:18:12 | decorated_function started
+my_function ok
+2024-09-30 04:18:12 | decorated_function finished successfully
+Execution time: 0.0001 seconds
+2024-09-30 04:18:30 | decorated_function started
+my_function ok
+2024-09-30 04:18:30 | decorated_function finished successfully
+Execution time: 0.0001 seconds
