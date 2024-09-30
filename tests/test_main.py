@@ -1,6 +1,6 @@
 import unittest
 from src.main import convert_transaction_to_rubles
-from unittest.mock import patch
+
 
 class TestConvertTransactionToRubles(unittest.TestCase):
 

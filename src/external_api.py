@@ -15,7 +15,7 @@ def get_exchange_rate(base_currency: str) -> float:
 
     Raises:
         ValueError: Если не удалось получить курс обмена или если API запрос завершился ошибкой.
-        requests.RequestException: При возникновении проблем при выполнении HTTP-запроса.
+        При возникновении проблем при выполнении HTTP-запроса.
     """
 
     try:
