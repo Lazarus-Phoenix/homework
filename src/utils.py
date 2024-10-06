@@ -23,7 +23,7 @@ file_handler.setLevel(logging.DEBUG)
 
 # Создаем консольный обработчик для проверки на серьёзные проблемы в работе кода.
 console_handler = logging.StreamHandler()
-console_handler.setLevel(logging.ERROR)
+console_handler.setLevel(logging.CRITICAL)
 
 # Создаем форматтер
 formatter = logging.Formatter("%(asctime)s | %(name)s | %(levelname)s | %(message)s")
@@ -69,8 +69,8 @@ def read_transactions_from_json(file_path=None, is_test=False):
 
     # Проверяем, существует ли файл и имеет ли он расширение .json
     if not os.path.exists(file_path) or not file_path.endswith(".json"):
+        logger.info(f"Попытка чтения файла: {file_path}")
         return []
-        logger.info("Попытка чтения файла: {file_path}")
 
     try:
         with open(file_path) as f:
@@ -78,18 +78,18 @@ def read_transactions_from_json(file_path=None, is_test=False):
 
         # Проверяем, является ли загруженное значение списком
         if isinstance(data, list):
-            logger.info("Успешно прочитано {len(data)} транзакций")
+            logger.info(f"Успешно прочитано {len(data)} транзакций")
             return data
         else:
-            logger.warning("Данные в файле не являются списком")
+            logger.warning(f"Данные в файле не являются списком")
             return []
 
     except json.JSONDecodeError:
-        logger.warning("Ошибка при декодировании JSON в файле {file_path}")
+        logger.error(f"Ошибка при декодировании JSON в файле {file_path}")
         return []
 
     except Exception as e:
-        logger.warning(f"Ошибка при чтении файла {file_path}: {e}")
+        logger.error(f"Ошибка при чтении файла {file_path}: {e}")
         return []
 
 
@@ -114,7 +114,7 @@ def transaction_amount(transaction):
     Raises:
         ValueError: При некорректных данных транзакции.
     """
-    logger.debug("Вызван transaction_amount с аргументом: {transaction}")
+    logger.debug(f"Вызван transaction_amount с аргументом: {transaction}")
     # Получаем сумму и валюту из транзакции
     amount_str = transaction["operationAmount"]["amount"]
     currency_code = transaction["operationAmount"]["currency"]["code"]
@@ -149,8 +149,8 @@ def transaction_amount(transaction):
         # Для неизвестных валют используем нулевые значения
         rub_amount = usd_amount = eur_amount = 0.0
         logger.error(f" Неизвестная валюта : {str('e')}")
+    logger.info(f"Вычислена сумма транзакции: {amount} {currency_code}")
     return rub_amount, usd_amount, eur_amount
-    logger.info("Вычислена сумма транзакции: {amount} {currency_code}")
 
 
 # Пример использования функции ограниченное демо 10 запросов
@@ -161,21 +161,21 @@ test_operations = read_transactions_from_json(is_test=True)
 # Но не заставляющий ждать вечность подтверждения работоспособности.
 for operation in range(10):
     if operation < len(operations):
-        logger.info("Запуск примера использования функций utils")
+        logger.info(f"Запуск примера использования функций utils")
         rub, usd, eur = transaction_amount(operations[operation])
-        print("ID: {operations[operation]['id']}")
-        print("Сумма в рублях: {rub:.2f} RUB")
-        print("Сумма в долларах: {usd:.2f} USD")
-        print("Сумма в евро: {eur:.2f} EUR")
-        print("---")
+        print(f"ID: {operations[operation]['id']}")
+        print(f"Сумма в рублях: {rub:.2f} RUB")
+        print(f"Сумма в долларах: {usd:.2f} USD")
+        print(f"Сумма в евро: {eur:.2f} EUR")
+        print(f"---")
         logger.info("Вывод суммы транзакции в валютах отработал")
     else:
         break
 
     # Пример использования функций
 if __name__ == "__main__":
-    logger.info("Запуск примера использования функций utils")
+    logger.info(f"Запуск примера использования функций utils")
     transactions = read_transactions_from_json()
     for transaction in transactions[:5]:  # Обрабатываем первые 5 транзакций
         rub, usd, eur = transaction_amount(transaction)
-        logger.info("ID: {transaction['id']}, RUB: {rub:.2f}, USD: {usd:.2f}, EUR: {eur:.2f}")
+        logger.info(f"ID: {transaction['id']}, RUB: {rub:.2f}, USD: {usd:.2f}, EUR: {eur:.2f}")
