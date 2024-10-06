@@ -1,13 +1,15 @@
+import json
 import logging
 import os
-import json
+from datetime import datetime
+
 from src.external_api import get_exchange_rate
 
 # Получаем путь к корневой директории проекта
 project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Создаем директорию для логов в корне проекта, если она не существует
-log_dir = os.path.join(project_root, 'logs')
+log_dir = os.path.join(project_root, "logs")
 os.makedirs(log_dir, exist_ok=True)
 
 # Получаем логгер для модуля utils
@@ -15,15 +17,16 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
 # Создаем файловый обработчик
-file_handler = logging.FileHandler(os.path.join(log_dir, 'log_utils.log'))
+log_file_path = os.path.join(log_dir, "log_utils.log")
+file_handler = logging.FileHandler(log_file_path, mode="w")
 file_handler.setLevel(logging.DEBUG)
 
 # Создаем консольный обработчик для проверки на серьёзные проблемы в работе кода.
 console_handler = logging.StreamHandler()
 console_handler.setLevel(logging.ERROR)
 
-# Создае�� форматтер
-formatter = logging.Formatter('%(asctime)s | %(name)s | %(levelname)s | %(message)s')
+# Создаем форматтер
+formatter = logging.Formatter("%(asctime)s | %(name)s | %(levelname)s | %(message)s")
 
 # Добавляем форматтер к обработчикам
 file_handler.setFormatter(formatter)
@@ -33,7 +36,9 @@ console_handler.setFormatter(formatter)
 logger.addHandler(file_handler)
 logger.addHandler(console_handler)
 
-logger.debug('Debug message')
+# Записываем время запуска программы
+start_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+logger.info(f"Программа запущена в {start_time}")
 
 
 def read_transactions_from_json(file_path=None, is_test=False):
@@ -65,7 +70,7 @@ def read_transactions_from_json(file_path=None, is_test=False):
     # Проверяем, существует ли файл и имеет ли он расширение .json
     if not os.path.exists(file_path) or not file_path.endswith(".json"):
         return []
-        logger.info(f"Попытка чтения файла: {file_path}")
+        logger.info("Попытка чтения файла: {file_path}")
 
     try:
         with open(file_path) as f:
@@ -73,18 +78,18 @@ def read_transactions_from_json(file_path=None, is_test=False):
 
         # Проверяем, является ли загруженное значение списком
         if isinstance(data, list):
-            logger.info(f"Успешно прочитано {len(data)} транзакций")
+            logger.info("Успешно прочитано {len(data)} транзакций")
             return data
         else:
             logger.warning("Данные в файле не являются списком")
             return []
 
     except json.JSONDecodeError:
-        logger.debug(f"Ошибка при декодировании JSON в файле {file_path}")
+        logger.warning("Ошибка при декодировании JSON в файле {file_path}")
         return []
 
     except Exception as e:
-        logger.debug(f"Ошибка при чтении файла {file_path}: {str(e)}")
+        logger.warning(f"Ошибка при чтении файла {file_path}: {e}")
         return []
 
 
@@ -109,7 +114,7 @@ def transaction_amount(transaction):
     Raises:
         ValueError: При некорректных данных транзакции.
     """
-    logger.debug(f"Вызван transaction_amount с аргументом: {transaction}")
+    logger.debug("Вызван transaction_amount с аргументом: {transaction}")
     # Получаем сумму и валюту из транзакции
     amount_str = transaction["operationAmount"]["amount"]
     currency_code = transaction["operationAmount"]["currency"]["code"]
@@ -143,9 +148,9 @@ def transaction_amount(transaction):
     else:
         # Для неизвестных валют используем нулевые значения
         rub_amount = usd_amount = eur_amount = 0.0
-        logger.error(f" Неизвестная валюта : {str(e)}")
+        logger.error(f" Неизвестная валюта : {str('e')}")
     return rub_amount, usd_amount, eur_amount
-    logger.info(f"Вычислена сумма транзакции: {amount} {currency_code}")
+    logger.info("Вычислена сумма транзакции: {amount} {currency_code}")
 
 
 # Пример использования функции ограниченное демо 10 запросов
@@ -158,10 +163,10 @@ for operation in range(10):
     if operation < len(operations):
         logger.info("Запуск примера использования функций utils")
         rub, usd, eur = transaction_amount(operations[operation])
-        print(f"ID: {operations[operation]['id']}")
-        print(f"Сумма в рублях: {rub:.2f} RUB")
-        print(f"Сумма в долларах: {usd:.2f} USD")
-        print(f"Сумма в евро: {eur:.2f} EUR")
+        print("ID: {operations[operation]['id']}")
+        print("Сумма в рублях: {rub:.2f} RUB")
+        print("Сумма в долларах: {usd:.2f} USD")
+        print("Сумма в евро: {eur:.2f} EUR")
         print("---")
         logger.info("Вывод суммы транзакции в валютах отработал")
     else:
@@ -173,5 +178,4 @@ if __name__ == "__main__":
     transactions = read_transactions_from_json()
     for transaction in transactions[:5]:  # Обрабатываем первые 5 транзакций
         rub, usd, eur = transaction_amount(transaction)
-        logger.info(f"ID: {transaction['id']}, RUB: {rub:.2f}, USD: {usd:.2f}, EUR: {eur:.2f}")
-
+        logger.info("ID: {transaction['id']}, RUB: {rub:.2f}, USD: {usd:.2f}, EUR: {eur:.2f}")
