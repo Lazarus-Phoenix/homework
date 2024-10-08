@@ -1,6 +1,7 @@
-import pandas as pd
 import os
-from typing import List, Dict
+from typing import Dict, List
+
+import pandas as pd
 
 
 def read_csv(file_path: str) -> List[Dict]:
@@ -14,8 +15,8 @@ def read_csv(file_path: str) -> List[Dict]:
     List[Dict]: Список словарей с данными о финансовых операциях.
     """
     try:
-        df = pd.read_csv(file_path)
-        return df.to_dict('records')
+        df = pd.read_csv(file_path, delimiter=';')
+        return df.to_dict("records")
     except Exception as e:
         print(f"Ошибка при чтении CSV-файла: {str(e)}")
         return []
@@ -33,7 +34,7 @@ def read_xlsx(file_path: str) -> List[Dict]:
     """
     try:
         df = pd.read_excel(file_path)
-        return df.to_dict('records')
+        return df.to_dict("records")
     except Exception as e:
         print(f"Ошибка при чтении XLSX-файла: {str(e)}")
         return []
@@ -52,9 +53,9 @@ def read_all_files_in_directory(directory: str) -> List[Dict]:
     all_data = []
     for filename in os.listdir(directory):
         file_path = os.path.join(directory, filename)
-        if filename.endswith('.csv'):
+        if filename.endswith(".csv"):
             all_data.extend(read_csv(file_path))
-        elif filename.endswith('.xlsx'):
+        elif filename.endswith(".xlsx"):
             all_data.extend(read_xlsx(file_path))
     return all_data
 
@@ -75,4 +76,5 @@ if __name__ == "__main__":
             print(all_operations[0])
     else:
         print(
-            "Директория с данными не найдена. Пожалуйста, убедитесь, что директория 'data' существует в корне проекта.")
+            "Директория с данными не найдена. Пожалуйста, убедитесь, что директория 'data' существует в корне проекта."
+        )
