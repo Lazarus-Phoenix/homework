@@ -2,3 +2,7 @@
 my_function ok
 2024-09-21 23:17:36 | decorated_function finished successfully
 Execution time: 0.0002 seconds
+2024-10-11 14:02:03 | decorated_function started
+my_function ok
+2024-10-11 14:02:03 | decorated_function finished successfully
+Execution time: 0.0004 seconds

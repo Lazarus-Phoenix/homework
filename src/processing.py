@@ -1,17 +1,46 @@
+import re
+from collections import Counter
 from datetime import datetime
 from typing import List, Dict, Any
 
 
-def filter_by_state(operations: List[Dict[str, Any]], state: str = "EXECUTED") -> List[Dict[str, Any]]:
-    """Фильтрация операций по состоянию"""
-    filtered_operations = [i for i in operations if i["state"] == state]
+def filter_by_description(operations: List[Dict[str, Any]], search_string: str) -> List[Dict[str, Any]]:
+    """Фильтрация операций по описанию"""
+    pattern = re.compile(search_string, re.IGNORECASE)
+    filtered_operations = [op for op in operations if pattern.search(op.get("description", ""))]
     return filtered_operations
 
 
-def sort_by_date(filtered_operations: list[dict[str, int]], reverse: bool = True) -> list[dict[str, int]]:
+
+def count_operations_by_category(operations: List[Dict[str, Any]]) -> Dict[str, int]:
+    """Подсчет количества операций по категориям"""
+    categories = Counter()
+    for op in operations:
+       category = op.get("description", "").strip().lower()
+       categories[category] += 1
+    return categories
+
+
+def filter_by_state(operations: List[Dict[str, Any]], state: str = "EXECUTED") -> List[Dict[str, Any]]:
+    """Фильтрация операций по состоянию"""
+    filtered_operations = [i for i in operations if i.get("state") == state]
+    return filtered_operations
+
+
+def sort_by_date(filtered_operations: List[Dict[str, Any]], reverse: bool = True) -> List[Dict[str, Any]]:
     """Сортировка операций по дате"""
+    def parse_date(date_string):
+        # Попробуем разные форматы даты
+        for fmt in ["%Y-%m-%dT%H:%M:%S.%f", "%Y-%m-%dT%H:%M:%SZ", "%Y-%m-%d %H:%M:%S"]:
+            try:
+                return datetime.strptime(date_string, fmt)
+            except ValueError:
+                pass
+        # Если ни один формат не подошел, вернем None
+        return None
+
     sorted_list = sorted(
-        filtered_operations, key=lambda x: datetime.strptime(x["date"], "%Y-%m-%dT%H:%M:%S.%f"), reverse=reverse
+        filtered_operations, key=lambda x: parse_date(x["date"]), reverse=reverse
     )
     return sorted_list
 
