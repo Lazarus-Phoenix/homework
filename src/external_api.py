@@ -40,7 +40,6 @@ def get_exchange_rate(base_currency: str) -> float:
         # Получаем курс обмена в рубли
         rub_rate = data["rates"]["RUB"]
 
-
         # Проверяем, что курс обмена не None и приводим его к типу float
         if rub_rate is None:
             raise ValueError(f"None найден обменный курс для {base_currency} to RUB")
