@@ -1,7 +1,7 @@
 import re
 from collections import Counter
 from datetime import datetime
-from typing import List, Dict, Any
+from typing import Any, Dict, List
 
 
 def filter_by_description(operations: List[Dict[str, Any]], search_string: str) -> List[Dict[str, Any]]:
@@ -11,13 +11,12 @@ def filter_by_description(operations: List[Dict[str, Any]], search_string: str) 
     return filtered_operations
 
 
-
 def count_operations_by_category(operations: List[Dict[str, Any]]) -> Dict[str, int]:
     """Подсчет количества операций по категориям"""
     categories = Counter()
     for op in operations:
-       category = op.get("description", "").strip().lower()
-       categories[category] += 1
+        category = op.get("state", "").strip().upper()
+        categories[category] += 1
     return categories
 
 
@@ -29,19 +28,18 @@ def filter_by_state(operations: List[Dict[str, Any]], state: str = "EXECUTED") -
 
 def sort_by_date(filtered_operations: List[Dict[str, Any]], reverse: bool = True) -> List[Dict[str, Any]]:
     """Сортировка операций по дате"""
+
     def parse_date(date_string):
-        # Попробуем разные форматы даты
+        if not date_string:
+            return datetime.min
         for fmt in ["%Y-%m-%dT%H:%M:%S.%f", "%Y-%m-%dT%H:%M:%SZ", "%Y-%m-%d %H:%M:%S"]:
             try:
                 return datetime.strptime(date_string, fmt)
             except ValueError:
                 pass
-        # Если ни один формат не подошел, вернем None
-        return None
+            return datetime.min
 
-    sorted_list = sorted(
-        filtered_operations, key=lambda x: parse_date(x["date"]), reverse=reverse
-    )
+    sorted_list = sorted(filtered_operations, key=lambda x: parse_date(x.get("date", "")), reverse=reverse)
     return sorted_list
 
 

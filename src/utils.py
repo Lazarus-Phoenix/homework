@@ -1,19 +1,17 @@
 import json
+import logging
 import os
-
-from typing import List, Dict, Any
+from typing import Any, Dict, List
 
 from src.external_api import get_exchange_rate
-
-import logging
 
 # Создаем корневой logger
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 # Создаем файловый хендлер
-file_handler = logging.FileHandler('logs/log_utils.log')
-file_handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
+file_handler = logging.FileHandler("logs/log_utils.log")
+file_handler.setFormatter(logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s"))
 logger.addHandler(file_handler)
 
 
@@ -33,7 +31,7 @@ def read_transactions_from_json(file_path: str = None, is_test: bool = False) ->
             file_path = os.path.join(data_dir, "operations.json")
 
     try:
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, "r", encoding="utf-8") as f:
             data = json.load(f)
 
         if isinstance(data, list):
@@ -114,4 +112,3 @@ def transaction_amount(transaction):
 # Пример использования функции ограниченное демо 10 запросов
 operations = read_transactions_from_json()
 test_operations = read_transactions_from_json(is_test=True)
-

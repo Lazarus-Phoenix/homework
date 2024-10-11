@@ -6,3 +6,7 @@ Execution time: 0.0002 seconds
 my_function ok
 2024-10-11 14:02:03 | decorated_function finished successfully
 Execution time: 0.0004 seconds
+2024-10-11 15:10:41 | decorated_function started
+my_function ok
+2024-10-11 15:10:41 | decorated_function finished successfully
+Execution time: 0.0002 seconds

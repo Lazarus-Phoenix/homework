@@ -1,11 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import os
-from typing import List, Dict, Any
-from src.utils import read_transactions_from_json
-from src.processing import filter_by_state, sort_by_date, filter_by_description, count_operations_by_category
 from src.csv_reader import read_csv
+from src.processing import count_operations_by_category, filter_by_description, filter_by_state, sort_by_date
+from src.utils import read_transactions_from_json
 from src.xlsx_reader import read_xlsx
 
 
@@ -21,10 +19,12 @@ def main():
     if choice == "1":
         operations = read_transactions_from_json()
         print("Для обработки выбран JSON-файл.")
+        print(f"Загружено {len(operations)} операций.")
     elif choice == "2":
         try:
             operations = read_csv()
             print("Для обработки выбран CSV-файл.")
+            print(f"Загружено {len(operations)} операций.")
         except Exception as e:
             print(f"Ошибка при чтении CSV-файла: {str(e)}")
             return
@@ -32,6 +32,7 @@ def main():
         try:
             operations = read_xlsx()
             print("Для обработки выбран XLSX-файл.")
+            print(f"Загружено {len(operations)} операций.")
         except Exception as e:
             print(f"Ошибка при чтении XLSX-файла: {str(e)}")
             return
@@ -40,10 +41,8 @@ def main():
         return
 
     if not operations:
-        print("Не найдено ни одной транзакции, подходящей под ваши условия фильтрации")
+        print("Не найдено ни одной транзакции, подходящей под ваши условия филь��рации")
         return
-
-    print(f"Загружено {len(operations)} операций.")
 
     # Фильтрация по статусу
     while True:
